@@ -1,4 +1,5 @@
 import type { Lesson } from '../types';
+import { useLessonStore } from '../store/useLessonStore';
 
 interface CommandResult {
     output: string;
@@ -9,8 +10,13 @@ interface CommandResult {
 
 export const parseCommand = (input: string, currentLesson: Lesson | null): CommandResult => {
     const trimmedInput = input.trim();
-    const parts = trimmedInput.split(' ');
+    // Handle quoted strings in arguments (simple version)
+    // For now, simple split by space, but we should respect quotes for echo
+    const parts = trimmedInput.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
     const command = parts[0];
+
+    // Get store actions directly (non-reactive way is fine for this utility)
+    const store = useLessonStore.getState();
 
     if (!trimmedInput) {
         return { output: '', success: true };
@@ -27,6 +33,11 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
   help      Show this help message
   clear     Clear the terminal
   echo      Print text to the terminal
+  ls        List directory contents
+  cd        Change directory
+  pwd       Print working directory
+  mkdir     Create directory
+  touch     Create file
   source    Source the ROS 2 setup file
   ros2      Run ROS 2 commands (run, topic, node)`,
             success: true,
@@ -34,7 +45,49 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
     }
 
     if (command === 'echo') {
-        return { output: parts.slice(1).join(' '), success: true };
+        const text = parts.slice(1).join(' ').replace(/"/g, '');
+        return { output: text, success: true };
+    }
+
+    // File System Commands
+    if (command === 'ls') {
+        const output = store.listFiles();
+        return { output, success: true };
+    }
+
+    if (command === 'pwd') {
+        const path = '/' + store.currentPath.join('/');
+        return { output: path, success: true };
+    }
+
+    if (command === 'cd') {
+        const path = parts[1];
+        if (!path) {
+            // cd without args goes home
+            store.changeDirectory('~');
+            return { output: '', success: true };
+        }
+        const error = store.changeDirectory(path);
+        if (error) {
+            return { output: error, success: false };
+        }
+        return { output: '', success: true };
+    }
+
+    if (command === 'mkdir') {
+        const name = parts[1];
+        if (!name) return { output: 'mkdir: missing operand', success: false };
+        const error = store.createDirectory(name);
+        if (error) return { output: error, success: false };
+        return { output: '', success: true };
+    }
+
+    if (command === 'touch') {
+        const name = parts[1];
+        if (!name) return { output: 'touch: missing operand', success: false };
+        const error = store.createFile(name);
+        if (error) return { output: error, success: false };
+        return { output: '', success: true };
     }
 
     // 2. Handle ROS 2 Commands
@@ -100,6 +153,9 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
     if (currentLesson) {
         const expected = currentLesson.expectedCommand;
         let isMatch = false;
+
+        // Special handling for cd/ls/pwd to ensure they actually worked before granting success
+        // But since we run the command first above, we just check if the input matches expected
 
         if (typeof expected === 'string') {
             isMatch = trimmedInput === expected;

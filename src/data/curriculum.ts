@@ -171,6 +171,62 @@ Type:
                         expectedCommand: 'cd src',
                         successMessage: 'You moved! Navigation is key. In ROS, you will jump between your workspace source, build folders, and system install paths frequently.',
                         xpReward: 20,
+                    },
+                    {
+                        id: 'lesson_5',
+                        title: '5. Creating Directories (mkdir)',
+                        contentMarkdown: `
+## Organizing Your Workspace
+
+In ROS 2, you need to create specific folder structures for your packages.
+
+## The mkdir Command
+
+\`mkdir\` stands for **Make Directory**.
+
+**Syntax:**
+\`mkdir <directory_name>\`
+
+## Try It Yourself
+
+Create a new directory called \`my_package\`.
+
+Type:
+
+\`mkdir my_package\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'mkdir my_package',
+                        successMessage: 'Directory created! You will use this to create new ROS packages and organize your launch files.',
+                        xpReward: 20,
+                    },
+                    {
+                        id: 'lesson_6',
+                        title: '6. Creating Files (touch)',
+                        contentMarkdown: `
+## Creating Empty Files
+
+Sometimes you need to create a placeholder file, like a Python script or a launch file.
+
+## The touch Command
+
+\`touch\` creates an empty file.
+
+**Syntax:**
+\`touch <filename>\`
+
+## Try It Yourself
+
+Create a file named \`node.py\`.
+
+Type:
+
+\`touch node.py\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'touch node.py',
+                        successMessage: 'File created! In the real world, you would now open this file in a code editor to write your ROS node.',
+                        xpReward: 20,
                     }
                 ]
             },
@@ -180,7 +236,34 @@ Type:
                 lessons: [
                     {
                         id: 'lesson_2_1',
-                        title: '1. What is a Node?',
+                        title: '1. Sourcing the Setup File',
+                        contentMarkdown: `
+## The Most Important ROS Command
+
+Before you can run any ROS 2 command, you must **source** the setup file. This sets up your environment variables so the terminal knows where to find ROS commands.
+
+## The source Command
+
+**Syntax:**
+\`source /opt/ros/humble/setup.bash\` (for global ROS)
+\`source install/setup.bash\` (for your local workspace)
+
+## Try It Yourself
+
+Let's simulate sourcing the global ROS installation.
+
+Type:
+
+\`source /opt/ros/humble/setup.bash\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'source /opt/ros/humble/setup.bash',
+                        successMessage: 'Environment sourced! If you ever see "command not found: ros2", you probably forgot this step.',
+                        xpReward: 25,
+                    },
+                    {
+                        id: 'lesson_2_2',
+                        title: '2. What is a Node?',
                         contentMarkdown: `
 ## The Brain Cells of Robots
 
@@ -210,6 +293,32 @@ Type:
                         initialCode: '',
                         expectedCommand: 'ros2 run demo_nodes_cpp talker',
                         successMessage: 'You started a node! This node publishes "Hello World" messages. You are now running actual ROS 2 code!',
+                        xpReward: 25,
+                    },
+                    {
+                        id: 'lesson_2_3',
+                        title: '3. Listing Active Nodes',
+                        contentMarkdown: `
+## Checking What's Running
+
+When debugging a robot, you often need to see which nodes are currently active.
+
+## The ros2 node list Command
+
+**Syntax:**
+\`ros2 node list\`
+
+## Try It Yourself
+
+See what nodes are running (including the one you just started!).
+
+Type:
+
+\`ros2 node list\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 node list',
+                        successMessage: 'Correct! You should see /talker in the list. This confirms your node is alive and registered with the ROS graph.',
                         xpReward: 25,
                     }
                 ]
