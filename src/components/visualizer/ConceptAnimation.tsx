@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-export type AnimationType = 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set' | 'terminal_echo' | 'fs_pwd' | 'fs_ls' | 'fs_cd' | 'fs_mkdir' | 'fs_touch';
+export type AnimationType = 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set' | 'terminal_echo' | 'fs_pwd' | 'fs_ls' | 'fs_cd' | 'fs_mkdir' | 'fs_touch' | 'turtlesim_hello' | 'teleop_keys' | 'topic_cmd_vel' | 'topic_circle' | 'service_teleport' | 'service_pen' | 'service_reset' | 'service_spawn' | 'rviz_viz';
 
 interface ConceptAnimationProps {
     type: AnimationType;
@@ -20,6 +20,15 @@ export const ConceptAnimation = ({ type }: ConceptAnimationProps) => {
     if (type === 'fs_cd') return <FsCdAnimation />;
     if (type === 'fs_mkdir') return <FsMkdirAnimation />;
     if (type === 'fs_touch') return <FsTouchAnimation />;
+    if (type === 'turtlesim_hello') return <TurtlesimHelloAnimation />;
+    if (type === 'teleop_keys') return <TeleopKeysAnimation />;
+    if (type === 'topic_cmd_vel') return <TopicCmdVelAnimation />;
+    if (type === 'topic_circle') return <TopicCircleAnimation />;
+    if (type === 'service_teleport') return <ServiceTeleportAnimation />;
+    if (type === 'service_pen') return <ServicePenAnimation />;
+    if (type === 'service_reset') return <ServiceResetAnimation />;
+    if (type === 'service_spawn') return <ServiceSpawnAnimation />;
+    if (type === 'rviz_viz') return <RvizVizAnimation />;
     return null;
 };
 
@@ -447,6 +456,227 @@ const ServiceAnimation = () => {
                     </motion.div>
                 </div>
                 <span className="text-xs text-slate-500">Node B</span>
+            </div>
+        </div>
+    );
+};
+
+const TurtlesimHelloAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="w-64 h-48 bg-blue-500/10 flex items-center justify-center relative">
+                <motion.div
+                    className="text-4xl"
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                >
+                    🐢
+                </motion.div>
+                <div className="absolute top-2 left-2 text-[10px] text-blue-300">Turtlesim Window</div>
+            </div>
+        </div>
+    );
+};
+
+const TeleopKeysAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden gap-8">
+            <div className="grid grid-cols-3 gap-1">
+                <div />
+                <motion.div
+                    className="w-8 h-8 border border-slate-600 rounded flex items-center justify-center text-slate-400"
+                    animate={{ backgroundColor: ['#1e293b', '#334155', '#1e293b'] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                >↑</motion.div>
+                <div />
+                <motion.div
+                    className="w-8 h-8 border border-slate-600 rounded flex items-center justify-center text-slate-400"
+                    animate={{ backgroundColor: ['#1e293b', '#334155', '#1e293b'] }}
+                    transition={{ duration: 1, repeat: Infinity, delay: 0.3 }}
+                >←</motion.div>
+                <motion.div
+                    className="w-8 h-8 border border-slate-600 rounded flex items-center justify-center text-slate-400"
+                    animate={{ backgroundColor: ['#1e293b', '#334155', '#1e293b'] }}
+                    transition={{ duration: 1, repeat: Infinity, delay: 0.6 }}
+                >↓</motion.div>
+                <motion.div
+                    className="w-8 h-8 border border-slate-600 rounded flex items-center justify-center text-slate-400"
+                    animate={{ backgroundColor: ['#1e293b', '#334155', '#1e293b'] }}
+                    transition={{ duration: 1, repeat: Infinity, delay: 0.9 }}
+                >→</motion.div>
+            </div>
+            <div className="text-2xl">➡️</div>
+            <motion.div
+                className="text-4xl"
+                animate={{ x: [0, 10, 0, -10, 0], y: [0, -10, 0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+            >
+                🐢
+            </motion.div>
+        </div>
+    );
+};
+
+const TopicCmdVelAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden gap-4">
+            <div className="w-32 h-20 bg-slate-950 border border-slate-700 rounded p-2 text-[8px] font-mono text-slate-400">
+                $ ros2 topic pub...
+            </div>
+            <motion.div
+                className="w-2 h-2 bg-orange-500 rounded-full"
+                animate={{ x: [0, 60], opacity: [0, 1, 0] }}
+                transition={{ duration: 1, repeat: Infinity }}
+            />
+            <motion.div
+                className="text-4xl"
+                animate={{ x: [0, 20, 0] }}
+                transition={{ duration: 1, repeat: Infinity }}
+            >
+                🐢
+            </motion.div>
+        </div>
+    );
+};
+
+const TopicCircleAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <motion.div
+                className="text-4xl"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                style={{ originX: 2, originY: 0.5 }}
+            >
+                🐢
+            </motion.div>
+        </div>
+    );
+};
+
+const ServiceTeleportAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden w-full">
+            <div className="relative w-64 h-32 bg-blue-500/5 rounded border border-blue-500/20">
+                <motion.div
+                    className="absolute text-4xl"
+                    animate={{
+                        opacity: [1, 0, 0, 1],
+                        x: [20, 20, 180, 180],
+                        y: [20, 20, 60, 60],
+                        scale: [1, 0, 0, 1]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, times: [0, 0.4, 0.6, 1] }}
+                >
+                    🐢
+                </motion.div>
+                <div className="absolute top-2 left-2 text-[10px] text-blue-300">/teleport_absolute</div>
+            </div>
+        </div>
+    );
+};
+
+const ServicePenAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="relative w-64 h-32 bg-blue-500/5 rounded border border-blue-500/20 flex items-center justify-center">
+                <motion.div
+                    className="absolute w-full h-1 bg-slate-600"
+                    style={{ top: '50%' }}
+                />
+                <motion.div
+                    className="absolute w-full h-2 bg-red-500"
+                    style={{ top: '50%' }}
+                    initial={{ width: 0 }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                />
+                <motion.div
+                    className="text-4xl z-10 relative"
+                    animate={{ x: [-100, 100] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                >
+                    🐢
+                </motion.div>
+            </div>
+        </div>
+    );
+};
+
+const ServiceResetAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="relative w-64 h-32 bg-blue-500/5 rounded border border-blue-500/20 overflow-hidden">
+                {/* Messy lines */}
+                <motion.div
+                    className="absolute inset-0"
+                    animate={{ opacity: [1, 0, 0, 1] }}
+                    transition={{ duration: 3, repeat: Infinity, times: [0, 0.1, 0.9, 1] }}
+                >
+                    <svg className="w-full h-full stroke-slate-500 stroke-2 fill-none">
+                        <path d="M10,10 Q50,50 90,10 T150,50" />
+                        <path d="M20,80 L100,20 L150,90" />
+                    </svg>
+                </motion.div>
+
+                {/* Flash */}
+                <motion.div
+                    className="absolute inset-0 bg-white"
+                    animate={{ opacity: [0, 0.5, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, times: [0, 0.1, 0.5] }}
+                />
+
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl">
+                    🐢
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ServiceSpawnAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="flex gap-12">
+                <div className="text-4xl opacity-50">🐢</div>
+                <motion.div
+                    className="text-4xl"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                >
+                    🐢
+                </motion.div>
+            </div>
+        </div>
+    );
+};
+
+const RvizVizAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="w-64 h-40 bg-black border border-slate-700 relative perspective-500">
+                {/* Grid */}
+                <div className="absolute inset-0 grid grid-cols-6 grid-rows-4 gap-4 opacity-20">
+                    {Array.from({ length: 24 }).map((_, i) => (
+                        <div key={i} className="border border-slate-500" />
+                    ))}
+                </div>
+
+                {/* Axes */}
+                <div className="absolute bottom-4 left-4">
+                    <div className="w-0.5 h-8 bg-blue-500 absolute bottom-0 left-0"></div>
+                    <div className="w-8 h-0.5 bg-red-500 absolute bottom-0 left-0"></div>
+                    <div className="w-6 h-0.5 bg-green-500 absolute bottom-0 left-0 origin-left -rotate-45"></div>
+                </div>
+
+                {/* Robot Model */}
+                <motion.div
+                    className="absolute top-1/2 left-1/2 w-8 h-12 bg-slate-700 border border-orange-500"
+                    animate={{ rotateY: 360 }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                />
             </div>
         </div>
     );

@@ -368,6 +368,7 @@ Type:
                         expectedCommand: 'ros2 run turtlesim turtlesim_node',
                         successMessage: 'The turtle is alive! You just started a graphical node. This is your first step into robot simulation.',
                         xpReward: 30,
+                        visualizationType: 'turtlesim_hello'
                     },
                     {
                         id: 'lesson_3_2',
@@ -393,6 +394,7 @@ Run the teleop node:
                         expectedCommand: 'ros2 run turtlesim turtle_teleop_key',
                         successMessage: 'Teleop started! In a real ROS system, you would now use your arrow keys to drive the turtle around.',
                         xpReward: 30,
+                        visualizationType: 'teleop_keys'
                     },
                     {
                         id: 'lesson_3_3',
@@ -444,6 +446,7 @@ Type:
                         expectedCommand: 'ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"',
                         successMessage: 'It moved! You just manually injected a message into the robot\'s brain.',
                         xpReward: 40,
+                        visualizationType: 'topic_cmd_vel'
                     },
                     {
                         id: 'lesson_3_5',
@@ -465,6 +468,7 @@ Type:
                         expectedCommand: 'ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"',
                         successMessage: 'Look at it go! By combining linear and angular velocity, you can create complex paths.',
                         xpReward: 40,
+                        visualizationType: 'topic_circle'
                     },
                     {
                         id: 'lesson_3_6',
@@ -488,6 +492,7 @@ Type:
                         expectedCommand: 'ros2 service call /turtle1/teleport_absolute turtlesim/srv/TeleportAbsolute "{x: 1.0, y: 1.0, theta: 0.0}"',
                         successMessage: 'Zap! The turtle teleported. Services are great for requesting specific behaviors.',
                         xpReward: 40,
+                        visualizationType: 'service_teleport'
                     },
                     {
                         id: 'lesson_3_7',
@@ -511,6 +516,7 @@ Type:
                         expectedCommand: 'ros2 service call /turtle1/set_pen turtlesim/srv/SetPen "{r: 255, g: 0, b: 0, width: 5, off: 0}"',
                         successMessage: 'Pen changed! Any future movement will now draw a thick red line.',
                         xpReward: 40,
+                        visualizationType: 'service_pen'
                     },
                     {
                         id: 'lesson_3_8',
@@ -532,6 +538,7 @@ Type:
                         expectedCommand: 'ros2 service call /reset std_srvs/srv/Empty',
                         successMessage: 'Fresh start! The turtle is back in the center and the screen is clear.',
                         xpReward: 20,
+                        visualizationType: 'service_reset'
                     },
                     {
                         id: 'lesson_3_9',
@@ -555,6 +562,7 @@ Type:
                         expectedCommand: 'ros2 service call /spawn turtlesim/srv/Spawn "{x: 2.0, y: 2.0, theta: 0.0, name: \'turtle2\'}"',
                         successMessage: 'A new challenger approaches! (Note: In this basic sim, we only visualize one turtle, but the command worked!)',
                         xpReward: 50,
+                        visualizationType: 'service_spawn'
                     },
                     {
                         id: 'lesson_3_10',
@@ -580,6 +588,7 @@ Type:
                         expectedCommand: 'ros2 run rviz2 rviz2',
                         successMessage: 'Rviz launched! (In a full system, a 3D environment would appear). You have now mastered the basics of ROS 2 Visualization!',
                         xpReward: 50,
+                        visualizationType: 'rviz_viz'
                     }
                 ]
             }

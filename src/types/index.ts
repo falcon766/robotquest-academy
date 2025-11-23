@@ -6,7 +6,7 @@ export interface Lesson {
     expectedCommand: string | RegExp;
     successMessage: string;
     xpReward: number;
-    visualizationType?: 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set' | 'terminal_echo' | 'fs_pwd' | 'fs_ls' | 'fs_cd' | 'fs_mkdir' | 'fs_touch';
+    visualizationType?: 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set' | 'terminal_echo' | 'fs_pwd' | 'fs_ls' | 'fs_cd' | 'fs_mkdir' | 'fs_touch' | 'turtlesim_hello' | 'teleop_keys' | 'topic_cmd_vel' | 'topic_circle' | 'service_teleport' | 'service_pen' | 'service_reset' | 'service_spawn' | 'rviz_viz';
 }
 
 export interface Module {
