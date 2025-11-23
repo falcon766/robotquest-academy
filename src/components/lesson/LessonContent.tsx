@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { userService } from '../../services/userService';
 import { curriculum } from '../../data/curriculum';
+import { ConceptAnimation } from '../visualizer/ConceptAnimation';
 
 export const LessonContent = () => {
     const { currentLesson, setCurrentLesson } = useLessonStore();
@@ -88,6 +89,12 @@ export const LessonContent = () => {
             </div>
 
             <div className="prose prose-invert prose-slate max-w-none">
+                {currentLesson.visualizationType && (
+                    <div className="mb-8">
+                        <ConceptAnimation type={currentLesson.visualizationType} />
+                    </div>
+                )}
+
                 <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 mb-6">
                     <div className="text-slate-300 leading-relaxed space-y-4">
                         {currentLesson.contentMarkdown.split('\n').map((line, i) => {

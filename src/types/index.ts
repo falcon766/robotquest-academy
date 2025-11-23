@@ -6,6 +6,7 @@ export interface Lesson {
     expectedCommand: string | RegExp;
     successMessage: string;
     xpReward: number;
+    visualizationType?: 'topic' | 'service' | 'node' | 'action';
 }
 
 export interface Module {
