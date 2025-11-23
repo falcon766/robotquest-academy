@@ -152,23 +152,22 @@ To navigate the file tree, you use the \`cd\` command.
 \`cd\` stands for **Change Directory**.
 
 **Syntax:**
-- \`cd foldername\`: Go into a folder
+- \`cd <directory_name>\`: Go into a specific folder
 - \`cd ..\`: Go up one level (to the parent folder)
 - \`cd ~\`: Go to your home directory
-- \`cd /\`: Go to the root directory
 
 ## Try It Yourself
 
-Let's try to move into the \`src\` directory (common in ROS workspaces).
+In the previous lesson, you saw folders like \`workspace\`, \`documents\`, and \`downloads\`. Let's move into one of them.
 
 Type:
 
-\`cd src\`
+\`cd workspace\`
 
-(If it fails, try \`ls\` first to see what folders exist, then \`cd\` into one of them!)
+(Note: In the command above, we are telling the computer to "change directory" into the "workspace" folder.)
                         `,
                         initialCode: '',
-                        expectedCommand: 'cd src',
+                        expectedCommand: 'cd workspace',
                         successMessage: 'You moved! Navigation is key. In ROS, you will jump between your workspace source, build folders, and system install paths frequently.',
                         xpReward: 20,
                     },

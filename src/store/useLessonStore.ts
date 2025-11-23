@@ -204,7 +204,7 @@ export const useLessonStore = create<LessonStore>((set, get) => ({
         if (!node.children || node.children.length === 0) return '';
 
         return node.children.map(c =>
-            c.type === 'directory' ? `\x1b[1;34m${c.name}/\x1b[0m` : c.name
+            c.type === 'directory' ? `${c.name}/` : c.name
         ).join('  ');
     },
 
