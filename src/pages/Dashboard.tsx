@@ -16,12 +16,24 @@ export const Dashboard = () => {
     const handleModuleClick = (module: Module) => {
         if (!profile) return;
 
-        // Find the first incomplete lesson, or default to the first one
-        const firstIncomplete = module.lessons.find(l => !profile.completedLessons.includes(l.id));
-        const targetLesson = firstIncomplete || module.lessons[0];
+        // User Request: "take you to the last completed lesson. Or if all lessons are complete, the very first lesson."
+
+        // 1. Find all completed lessons in this module
+        const completedInModule = module.lessons.filter(l => profile.completedLessons.includes(l.id));
+
+        let targetLesson;
+
+        if (completedInModule.length > 0 && completedInModule.length < module.lessons.length) {
+            // If we have some completed, but not all, go to the last completed one (as requested)
+            // Note: Usually we'd go to the *next* one, but following specific instructions here.
+            targetLesson = completedInModule[completedInModule.length - 1];
+        } else {
+            // If none are completed, OR all are completed, go to the very first lesson
+            targetLesson = module.lessons[0];
+        }
 
         setCurrentLesson(targetLesson);
-        navigate('/');
+        navigate('/learn');
     };
 
     const fetchProfile = async () => {

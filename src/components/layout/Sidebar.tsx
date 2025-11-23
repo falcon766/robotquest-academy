@@ -4,10 +4,12 @@ import { curriculum } from '../../data/curriculum';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { userService } from '../../services/userService';
+import { useNavigate } from 'react-router-dom';
 
 export const Sidebar = () => {
     const { setCurrentLesson, currentLesson } = useLessonStore();
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
     const [completedLessons, setCompletedLessons] = useState<string[]>([]);
     const [openModules, setOpenModules] = useState<string[]>(['module_1']);
 
@@ -33,6 +35,11 @@ export const Sidebar = () => {
         setOpenModules(prev =>
             prev.includes(moduleId) ? prev.filter(id => id !== moduleId) : [...prev, moduleId]
         );
+    };
+
+    const handleLessonClick = (lesson: any) => {
+        setCurrentLesson(lesson);
+        navigate('/learn');
     };
 
     return (
@@ -64,7 +71,7 @@ export const Sidebar = () => {
                                                     return (
                                                         <button
                                                             key={lesson.id}
-                                                            onClick={() => setCurrentLesson(lesson)}
+                                                            onClick={() => handleLessonClick(lesson)}
                                                             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all group text-left ${isActive
                                                                 ? 'bg-slate-900 border-orange-500/50 text-white'
                                                                 : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-900/50 hover:text-slate-200'

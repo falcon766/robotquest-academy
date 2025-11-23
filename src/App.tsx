@@ -14,6 +14,7 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<LandingPage />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="learn" element={<div />} />
           </Route>
         </Routes>
       </BrowserRouter>
