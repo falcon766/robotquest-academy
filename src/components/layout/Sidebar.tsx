@@ -24,9 +24,9 @@ export const Sidebar = () => {
                 <div className="space-y-1">
                     <button
                         onClick={startLesson1}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900 text-slate-200 rounded-lg border border-slate-800 hover:border-blue-500/50 hover:bg-slate-800 transition-all group text-left"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900 text-slate-200 rounded-lg border border-slate-800 hover:border-orange-500/50 hover:bg-slate-800 transition-all group text-left"
                     >
-                        <Terminal size={18} className="text-slate-500 group-hover:text-blue-400 transition-colors" />
+                        <Terminal size={18} className="text-slate-500 group-hover:text-orange-400 transition-colors" />
                         <span className="text-sm font-medium">The Shell</span>
                     </button>
 
