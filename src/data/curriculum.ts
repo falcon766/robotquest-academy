@@ -257,9 +257,9 @@ Type:
                         `,
                         initialCode: '',
                         expectedCommand: 'source /opt/ros/humble/setup.bash',
-                        successMessage: 'Environment sourced! If you ever see "command not found: ros2", you probably forgot this step.',
-                        xpReward: 25,
-                        visualizationType: 'node'
+                        successMessage: 'Background changed! Parameters allow dynamic reconfiguration of your robot.',
+                        xpReward: 30,
+                        visualizationType: 'parameter_set'
                     },
                     {
                         id: 'lesson_2_2',
@@ -292,9 +292,9 @@ Type:
                         `,
                         initialCode: '',
                         expectedCommand: 'ros2 run demo_nodes_cpp talker',
-                        successMessage: 'You started a node! This node publishes "Hello World" messages. You are now running actual ROS 2 code!',
-                        xpReward: 25,
-                        visualizationType: 'node'
+                        successMessage: 'Detailed info revealed! You can see it publishes to /chatter and offers parameter services.',
+                        xpReward: 30,
+                        visualizationType: 'node_inspection'
                     },
                     {
                         id: 'lesson_2_3',

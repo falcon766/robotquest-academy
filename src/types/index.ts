@@ -6,7 +6,7 @@ export interface Lesson {
     expectedCommand: string | RegExp;
     successMessage: string;
     xpReward: number;
-    visualizationType?: 'topic' | 'service' | 'node' | 'action';
+    visualizationType?: 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set';
 }
 
 export interface Module {
