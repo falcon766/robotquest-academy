@@ -1,7 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Terminal, Cpu, Zap, ChevronRight } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 
 export const LandingPage = () => {
+    const { currentUser } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/dashboard');
+        }
+    }, [currentUser, navigate]);
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-slate-200 overflow-hidden relative font-sans selection:bg-blue-500/30">
             {/* Subtle Grid Background */}

@@ -81,6 +81,33 @@ export const Dashboard = () => {
                     <p className="text-slate-600 text-sm mb-6 leading-relaxed">Understand the fundamental building blocks of ROS 2 graphs.</p>
                 </div>
             </div>
+
+            {/* Account Settings Section */}
+            <div className="mt-12 pt-8 border-t border-slate-800">
+                <h3 className="text-xl font-bold text-white mb-6">Account Settings</h3>
+                <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 max-w-2xl">
+                    <div className="grid gap-6">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-400 mb-2">Display Name</label>
+                            <div className="text-white font-medium">{profile.displayName}</div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-400 mb-2">Email</label>
+                            <div className="text-white font-medium">{profile.email}</div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-400 mb-2">User ID</label>
+                            <div className="text-slate-500 text-xs font-mono">{profile.uid}</div>
+                        </div>
+                        <div className="pt-4 border-t border-slate-800">
+                            <button className="px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded hover:bg-red-500/20 transition-colors text-sm font-medium">
+                                Reset Progress
+                            </button>
+                            <p className="text-xs text-slate-500 mt-2">This will reset all your XP and lesson progress. This action cannot be undone.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

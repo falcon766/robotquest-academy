@@ -54,9 +54,9 @@ export const Navbar = () => {
                                     <span className="text-slate-500 text-xs">Lvl {profile.level}</span>
                                 </div>
                             )}
-                            <span className="text-slate-400 text-sm">
+                            <Link to="/dashboard" className="text-slate-400 text-sm hover:text-white transition-colors">
                                 {currentUser.displayName || currentUser.email}
-                            </span>
+                            </Link>
                             <button
                                 onClick={handleLogout}
                                 className="px-4 py-2 text-slate-400 hover:text-white text-sm font-medium transition-colors"
