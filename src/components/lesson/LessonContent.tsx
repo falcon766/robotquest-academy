@@ -65,17 +65,31 @@ export const LessonContent = () => {
 
             <div className="prose prose-invert prose-slate max-w-none">
                 <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 mb-6">
-                    <h2 className="text-xl font-semibold text-white mb-4">Instructions</h2>
                     <div className="text-slate-300 leading-relaxed space-y-4">
                         {currentLesson.contentMarkdown.split('\n').map((line, i) => {
-                            if (line.startsWith('#')) {
-                                return null; // Skip markdown headers since we have a custom title
+                            // Headers
+                            if (line.startsWith('## ')) {
+                                return <h2 key={i} className="text-2xl font-bold text-white mt-6 mb-3">{line.substring(3)}</h2>;
                             }
+                            if (line.startsWith('### ')) {
+                                return <h3 key={i} className="text-xl font-semibold text-white mt-4 mb-2">{line.substring(4)}</h3>;
+                            }
+                            // Bold text
+                            if (line.includes('**')) {
+                                const parts = line.split('**');
+                                return (
+                                    <p key={i} className="text-slate-300">
+                                        {parts.map((part, j) =>
+                                            j % 2 === 0 ? part : <strong key={j} className="text-white font-semibold">{part}</strong>
+                                        )}
+                                    </p>
+                                );
+                            }
+                            // Code inline
                             if (line.includes('`')) {
-                                // Simple code inline rendering
                                 const parts = line.split('`');
                                 return (
-                                    <p key={i}>
+                                    <p key={i} className="text-slate-300">
                                         {parts.map((part, j) =>
                                             j % 2 === 0 ?
                                                 part :
@@ -84,7 +98,12 @@ export const LessonContent = () => {
                                     </p>
                                 );
                             }
-                            if (line.trim()) {
+                            // List items
+                            if (line.trim().startsWith('- ')) {
+                                return <li key={i} className="ml-4 text-slate-300">{line.substring(2)}</li>;
+                            }
+                            // Regular paragraphs
+                            if (line.trim() && !line.startsWith('#')) {
                                 return <p key={i} className="text-slate-300">{line}</p>;
                             }
                             return null;
