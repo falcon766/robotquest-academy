@@ -1,5 +1,6 @@
 
 import { useLessonStore } from '../../store/useLessonStore';
+import { Terminal, Share2, MessageSquare } from 'lucide-react';
 
 export const Sidebar = () => {
     const { setCurrentLesson } = useLessonStore();
@@ -17,19 +18,28 @@ export const Sidebar = () => {
     };
 
     return (
-        <aside className="w-64 bg-slate-900 border-r border-slate-800 h-screen p-4 hidden md:block">
-            <div className="space-y-4">
-                <div className="text-slate-400 text-sm font-semibold uppercase">Modules</div>
-                <ul className="space-y-2">
-                    <li
+        <aside className="w-64 bg-slate-950 border-r border-slate-800 h-screen p-4 hidden md:flex flex-col">
+            <div className="space-y-6">
+                <div className="text-slate-500 text-xs font-bold uppercase tracking-widest px-2">Curriculum</div>
+                <div className="space-y-1">
+                    <button
                         onClick={startLesson1}
-                        className="text-slate-300 hover:text-cyan-400 cursor-pointer hover:bg-slate-800 p-2 rounded transition-colors"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900 text-slate-200 rounded-lg border border-slate-800 hover:border-blue-500/50 hover:bg-slate-800 transition-all group text-left"
                     >
-                        1. The Shell (Click to Start)
-                    </li>
-                    <li className="text-slate-300 hover:text-cyan-400 cursor-pointer p-2">2. Nodes</li>
-                    <li className="text-slate-300 hover:text-cyan-400 cursor-pointer p-2">3. Topics</li>
-                </ul>
+                        <Terminal size={18} className="text-slate-500 group-hover:text-blue-400 transition-colors" />
+                        <span className="text-sm font-medium">The Shell</span>
+                    </button>
+
+                    <button className="w-full flex items-center gap-3 px-3 py-2.5 text-slate-500 rounded-lg border border-transparent hover:bg-slate-900/50 transition-all text-left cursor-not-allowed opacity-60">
+                        <Share2 size={18} />
+                        <span className="text-sm font-medium">Nodes</span>
+                    </button>
+
+                    <button className="w-full flex items-center gap-3 px-3 py-2.5 text-slate-500 rounded-lg border border-transparent hover:bg-slate-900/50 transition-all text-left cursor-not-allowed opacity-60">
+                        <MessageSquare size={18} />
+                        <span className="text-sm font-medium">Topics</span>
+                    </button>
+                </div>
             </div>
         </aside>
     );
