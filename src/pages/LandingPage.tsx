@@ -7,24 +7,6 @@ export const LandingPage = () => {
             {/* Subtle Grid Background */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
 
-            {/* Navbar */}
-            <nav className="container mx-auto px-6 py-6 flex justify-between items-center relative z-10">
-                <div className="text-xl font-bold tracking-tight flex items-center gap-3">
-                    <div className="w-8 h-8 bg-slate-900 border border-slate-800 rounded flex items-center justify-center">
-                        <Terminal size={16} className="text-orange-500" />
-                    </div>
-                    <span className="text-slate-100">
-                        Droid<span className="text-orange-500">Academy</span>
-                    </span>
-                </div>
-                <div className="flex gap-4">
-                    <Link to="/login" className="px-4 py-2 text-slate-400 hover:text-white transition-colors text-sm font-medium">Login</Link>
-                    <Link to="/login" className="px-5 py-2 bg-orange-600 text-white text-sm font-bold rounded hover:bg-orange-500 transition-all">
-                        Get Started
-                    </Link>
-                </div>
-            </nav>
-
             {/* Hero Section */}
             <main className="container mx-auto px-6 pt-24 pb-32 text-center relative z-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/50 border border-slate-800 text-slate-400 text-xs font-medium mb-8 backdrop-blur-sm">
