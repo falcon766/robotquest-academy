@@ -1,12 +1,28 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { userService } from '../services/userService';
+import { useLessonStore } from '../store/useLessonStore';
+import { curriculum, type Module } from '../data/curriculum';
 import type { UserProfile } from '../types';
 
 export const Dashboard = () => {
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
+    const { setCurrentLesson } = useLessonStore();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const handleModuleClick = (module: Module) => {
+        if (!profile) return;
+
+        // Find the first incomplete lesson, or default to the first one
+        const firstIncomplete = module.lessons.find(l => !profile.completedLessons.includes(l.id));
+        const targetLesson = firstIncomplete || module.lessons[0];
+
+        setCurrentLesson(targetLesson);
+        navigate('/');
+    };
 
     const fetchProfile = async () => {
         if (!currentUser) return;
@@ -61,25 +77,66 @@ export const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="p-6 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-slate-600 transition-all group cursor-pointer">
-                    <div className="flex justify-between items-start mb-4">
-                        <h3 className="text-lg font-semibold text-white group-hover:text-orange-400 transition-colors">Module 1: The Shell</h3>
-                        <span className="px-2 py-1 bg-orange-500/10 text-orange-400 text-xs rounded border border-orange-500/20">Active</span>
-                    </div>
-                    <p className="text-slate-400 text-sm mb-6 leading-relaxed">Master the Linux command line and configure your ROS 2 environment.</p>
-                    <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                        <div className="bg-orange-500 h-full" style={{ width: `${profile.completedLessons.includes('lesson_1') ? 100 : 0}%` }}></div>
-                    </div>
-                </div>
+            <div className="space-y-12">
+                {curriculum.map((course) => (
+                    <div key={course.id}>
+                        <h3 className="text-xl font-bold text-slate-300 mb-6 flex items-center gap-2">
+                            <span className="w-2 h-8 bg-orange-500 rounded-full"></span>
+                            {course.title}
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {course.modules.map((module) => {
+                                const totalLessons = module.lessons.length;
+                                const completedCount = module.lessons.filter(l => profile.completedLessons.includes(l.id)).length;
+                                const progress = Math.round((completedCount / totalLessons) * 100);
+                                const isLocked = false; // For now, unlock everything for beta
+                                const isCompleted = progress === 100;
+                                const isActive = progress > 0 && progress < 100;
 
-                <div className="p-6 bg-slate-900/30 border border-slate-800 rounded-lg opacity-60">
-                    <div className="flex justify-between items-start mb-4">
-                        <h3 className="text-lg font-semibold text-slate-500">Module 2: Nodes</h3>
-                        <span className="px-2 py-1 bg-slate-800 text-slate-500 text-xs rounded border border-slate-700">Locked</span>
+                                return (
+                                    <div
+                                        key={module.id}
+                                        onClick={() => handleModuleClick(module)}
+                                        className={`p-6 border rounded-lg transition-all group cursor-pointer relative overflow-hidden ${isLocked
+                                            ? 'bg-slate-900/30 border-slate-800 opacity-60'
+                                            : 'bg-slate-900/50 border-slate-800 hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-900/10'
+                                            }`}
+                                    >
+                                        <div className="flex justify-between items-start mb-4 relative z-10">
+                                            <h3 className={`text-lg font-semibold transition-colors ${isLocked ? 'text-slate-500' : 'text-white group-hover:text-orange-400'
+                                                }`}>
+                                                {module.title}
+                                            </h3>
+                                            {isCompleted ? (
+                                                <span className="px-2 py-1 bg-green-500/10 text-green-400 text-xs rounded border border-green-500/20">Completed</span>
+                                            ) : isActive ? (
+                                                <span className="px-2 py-1 bg-orange-500/10 text-orange-400 text-xs rounded border border-orange-500/20">Active</span>
+                                            ) : (
+                                                <span className="px-2 py-1 bg-slate-800 text-slate-500 text-xs rounded border border-slate-700">Start</span>
+                                            )}
+                                        </div>
+
+                                        <p className="text-slate-400 text-sm mb-6 leading-relaxed relative z-10">
+                                            {module.lessons.length} Lessons • {module.lessons.reduce((acc, l) => acc + l.xpReward, 0)} XP
+                                        </p>
+
+                                        <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden relative z-10">
+                                            <div
+                                                className={`h-full transition-all duration-500 ${isCompleted ? 'bg-green-500' : 'bg-orange-500'}`}
+                                                style={{ width: `${progress}%` }}
+                                            ></div>
+                                        </div>
+
+                                        {/* Subtle background glow for active/hover */}
+                                        {!isLocked && (
+                                            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
-                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">Understand the fundamental building blocks of ROS 2 graphs.</p>
-                </div>
+                ))}
             </div>
 
             {/* Account Settings Section */}
