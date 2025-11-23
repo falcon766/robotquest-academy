@@ -18,8 +18,8 @@ export const LandingPage = () => {
                 </div>
 
                 <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 max-w-4xl mx-auto leading-tight text-white">
-                    Master Robotics.<br />
-                    <span className="text-slate-500">Zero Hardware.</span>
+                    Learn Robotics.<br />
+                    <span className="text-slate-500">No Hardware.</span>
                 </h1>
 
                 <p className="text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed font-light">

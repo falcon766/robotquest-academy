@@ -8,14 +8,19 @@ import { LessonContent } from '../lesson/LessonContent';
 export const MainLayout = () => {
     const location = useLocation();
     const isDashboard = location.pathname === '/dashboard';
+    const isLanding = location.pathname === '/';
 
     return (
         <div className="h-screen bg-black text-slate-200 flex flex-col overflow-hidden">
             <Navbar />
             <div className="flex flex-1 overflow-hidden">
-                <Sidebar />
+                {!isLanding && <Sidebar />}
                 <main className="flex-1 flex flex-col min-w-0">
-                    {isDashboard ? (
+                    {isLanding ? (
+                        <div className="flex-1 overflow-auto">
+                            <Outlet />
+                        </div>
+                    ) : isDashboard ? (
                         <div className="flex-1 p-6 overflow-auto">
                             <Outlet />
                         </div>

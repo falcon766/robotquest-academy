@@ -35,8 +35,8 @@ export const Navbar = () => {
     };
 
     return (
-        <nav className="bg-black border-b border-slate-800 px-6 py-4">
-            <div className="container mx-auto flex justify-between items-center">
+        <nav className="bg-black border-b border-slate-800 px-4 py-4">
+            <div className="w-full flex justify-between items-center">
                 <Link to="/" className="text-xl font-bold tracking-tight flex items-center gap-3">
                     <div className="w-8 h-8 bg-slate-900 border border-slate-800 rounded flex items-center justify-center">
                         <Terminal size={16} className="text-orange-500" />
