@@ -30,3 +30,15 @@ export interface RobotState {
     position: { x: number; y: number };
     battery: number;
 }
+
+export interface UserProfile {
+    uid: string;
+    email: string;
+    displayName: string;
+    xp: number;
+    level: number;
+    completedLessons: string[];
+    currentModuleId: string;
+    streak: number;
+    lastLogin: number;
+}

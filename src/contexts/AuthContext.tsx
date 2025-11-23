@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../services/firebase';
 import { onAuthStateChanged, type User, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { userService } from '../services/userService';
 
 interface AuthContextType {
     currentUser: User | null;
@@ -24,8 +25,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             setCurrentUser(user);
+            if (user) {
+                try {
+                    // Create profile if it doesn't exist
+                    await userService.createUserProfile(user.uid, user.email || '', user.displayName || '');
+                } catch (error) {
+                    console.error("Error creating user profile:", error);
+                    // Continue anyway, don't block the app
+                }
+            }
             setLoading(false);
         });
 

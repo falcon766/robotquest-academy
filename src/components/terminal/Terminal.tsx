@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLessonStore } from '../../store/useLessonStore';
 import { parseCommand } from '../../utils/commandParser';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const Terminal = () => {
-    const { terminalHistory, addLog, currentLesson, updateRobotState, clearLogs } = useLessonStore();
+    const { terminalHistory, addLog, currentLesson, updateRobotState, clearLogs, completeLesson } = useLessonStore();
+    const { currentUser } = useAuth();
     const [input, setInput] = useState('');
     const [historyIndex, setHistoryIndex] = useState(-1);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -36,6 +38,13 @@ export const Terminal = () => {
             } else {
                 if (result.output) {
                     addLog(result.success ? 'output' : 'error', result.output);
+                }
+
+                if (result.success && currentLesson && currentUser) {
+                    // Check if it was a lesson completion (simple check: if parseCommand returned success for a lesson)
+                    // parseCommand returns success: true if it matched the lesson expectation.
+                    // We should probably have a more explicit flag in CommandResult, but this works for now.
+                    completeLesson(currentUser.uid);
                 }
 
                 if (result.action === 'start_node') {

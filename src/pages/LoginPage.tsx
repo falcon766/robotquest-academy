@@ -11,6 +11,14 @@ export const LoginPage = () => {
         try {
             setError('');
             await loginWithGoogle();
+            // User is created/fetched in AuthContext, but we can ensure profile exists here
+            // Actually, it's better to do this in AuthContext or here. 
+            // Let's do it here for simplicity since we have the user object after login? 
+            // Wait, loginWithGoogle returns void in our context.
+            // We can get the current user from the context after redirect, or modify loginWithGoogle to return the user.
+            // For now, let's trust AuthContext updates currentUser.
+            // But we need the UID to create profile.
+            // Let's update AuthContext to return the user credential or handle profile creation.
             navigate('/dashboard');
         } catch (err) {
             setError('Failed to log in with Google.');
