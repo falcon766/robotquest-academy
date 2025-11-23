@@ -105,6 +105,17 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
             if (!pkg || !exec) {
                 return { output: 'usage: ros2 run <package> <executable>', success: false };
             }
+
+            // Special handling for turtlesim
+            if (pkg === 'turtlesim' && exec === 'turtlesim_node') {
+                return {
+                    output: `[INFO] [turtlesim]: Starting turtlesim node\n[INFO] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]`,
+                    success: true,
+                    action: 'start_node',
+                    payload: { package: pkg, executable: exec },
+                };
+            }
+
             return {
                 output: `[INFO] [launch]: process[${exec}-1]: started with pid [1234]`,
                 success: true,

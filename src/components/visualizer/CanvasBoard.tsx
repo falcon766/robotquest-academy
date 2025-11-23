@@ -69,26 +69,38 @@ export const CanvasBoard = () => {
         ctx.lineTo(width, offsetY);
         ctx.stroke();
 
-        // Draw Robot (Turtle)
-        const robotX = offsetX + robotState.position.x * gridSize;
-        const robotY = offsetY - robotState.position.y * gridSize; // Invert Y for standard coord system
+        // Draw Robot (Turtle) ONLY if turtlesim_node is running
+        const isTurtlesimRunning = robotState.activeNodes.includes('turtlesim_node');
 
-        ctx.save();
-        ctx.translate(robotX, robotY);
+        if (isTurtlesimRunning) {
+            const robotX = offsetX + robotState.position.x * gridSize;
+            const robotY = offsetY - robotState.position.y * gridSize; // Invert Y for standard coord system
 
-        // Draw Turtle Body
-        ctx.fillStyle = '#06b6d4'; // cyan-500
-        ctx.beginPath();
-        ctx.arc(0, 0, 15, 0, Math.PI * 2);
-        ctx.fill();
+            ctx.save();
+            ctx.translate(robotX, robotY);
 
-        // Draw Direction Indicator (Head)
-        ctx.fillStyle = '#ecfeff'; // cyan-50
-        ctx.beginPath();
-        ctx.arc(10, 0, 5, 0, Math.PI * 2);
-        ctx.fill();
+            // Draw Turtle Body
+            ctx.fillStyle = '#06b6d4'; // cyan-500
+            ctx.beginPath();
+            ctx.arc(0, 0, 15, 0, Math.PI * 2);
+            ctx.fill();
 
-        ctx.restore();
+            // Draw Direction Indicator (Head)
+            ctx.fillStyle = '#ecfeff'; // cyan-50
+            ctx.beginPath();
+            ctx.arc(10, 0, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        } else {
+            // Draw placeholder text if no simulation is running
+            ctx.font = '14px sans-serif';
+            ctx.fillStyle = '#475569'; // slate-600
+            ctx.textAlign = 'center';
+            ctx.fillText('No Simulation Running', width / 2, height / 2);
+            ctx.font = '12px sans-serif';
+            ctx.fillText('Type "ros2 run turtlesim turtlesim_node" to start', width / 2, height / 2 + 20);
+        }
 
         // Draw Active Nodes (Visual representation)
         if (robotState.activeNodes.length > 0) {

@@ -326,6 +326,46 @@ Type:
         ]
     },
     {
+        id: 'module_3',
+        title: 'Module 3: Visualization & Simulation',
+        description: 'See what the robot sees',
+        modules: [
+            {
+                id: 'module_3_1',
+                title: '1. Introduction to Turtlesim',
+                lessons: [
+                    {
+                        id: 'lesson_3_1',
+                        title: '1. Hello World of Robotics',
+                        contentMarkdown: `
+## What is that Chart on the Left?
+
+That "chart" is actually a 2D simulation window! In ROS, visualization is critical because you can't always see what the robot is thinking just by looking at the hardware.
+
+## Meet Turtlesim
+
+**Turtlesim** is the classic "Hello World" of ROS. It's a simple 2D simulator where you control a turtle. It teaches you about nodes, topics, and services without needing a complex physics engine.
+
+## Try It Yourself
+
+Let's wake up the turtle! Run the turtlesim node.
+
+Type:
+
+\`ros2 run turtlesim turtlesim_node\`
+
+**Watch the panel on the left!** You should see a blue turtle appear in the center.
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 run turtlesim turtlesim_node',
+                        successMessage: 'The turtle is alive! You just started a graphical node. This is your first step into robot simulation.',
+                        xpReward: 30,
+                    }
+                ]
+            }
+        ]
+    },
+    {
         id: 'intermediate_ros2',
         title: 'Intermediate ROS 2',
         description: 'Advanced concepts: TF2, Navigation, and Perception',
