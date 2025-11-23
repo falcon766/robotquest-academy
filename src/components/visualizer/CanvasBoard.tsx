@@ -69,6 +69,27 @@ export const CanvasBoard = () => {
         ctx.lineTo(width, offsetY);
         ctx.stroke();
 
+        // Draw Robot Path
+        if (robotState.path.length > 1) {
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // We need to draw segments because color/width might change
+            for (let i = 1; i < robotState.path.length; i++) {
+                const p1 = robotState.path[i - 1];
+                const p2 = robotState.path[i];
+
+                if (p2.penDown) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = p2.color;
+                    ctx.lineWidth = p2.width;
+                    ctx.moveTo(offsetX + p1.x * gridSize, offsetY - p1.y * gridSize);
+                    ctx.lineTo(offsetX + p2.x * gridSize, offsetY - p2.y * gridSize);
+                    ctx.stroke();
+                }
+            }
+        }
+
         // Draw Robot (Turtle) ONLY if turtlesim_node is running
         const isTurtlesimRunning = robotState.activeNodes.includes('turtlesim_node');
 
@@ -78,18 +99,32 @@ export const CanvasBoard = () => {
 
             ctx.save();
             ctx.translate(robotX, robotY);
+            ctx.rotate(-robotState.position.theta); // Rotate context (negative for standard ROS angle)
 
             // Draw Turtle Body
             ctx.fillStyle = '#06b6d4'; // cyan-500
             ctx.beginPath();
-            ctx.arc(0, 0, 15, 0, Math.PI * 2);
+            // Simple turtle shape
+            ctx.ellipse(0, 0, 15, 12, 0, 0, Math.PI * 2);
             ctx.fill();
 
-            // Draw Direction Indicator (Head)
+            // Legs
+            ctx.fillStyle = '#0891b2'; // cyan-600
+            ctx.beginPath(); ctx.arc(12, 10, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(12, -10, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(-10, 10, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(-10, -10, 4, 0, Math.PI * 2); ctx.fill();
+
+            // Head
             ctx.fillStyle = '#ecfeff'; // cyan-50
             ctx.beginPath();
-            ctx.arc(10, 0, 5, 0, Math.PI * 2);
+            ctx.arc(14, 0, 6, 0, Math.PI * 2);
             ctx.fill();
+
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.beginPath(); ctx.arc(16, 2, 1, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(16, -2, 1, 0, Math.PI * 2); ctx.fill();
 
             ctx.restore();
         } else {

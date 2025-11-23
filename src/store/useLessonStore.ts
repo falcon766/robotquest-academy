@@ -40,8 +40,12 @@ const initialRobotState: RobotState = {
     isNodeRunning: false,
     activeNodes: [],
     activeTopics: [],
-    position: { x: 0, y: 0 },
+    position: { x: 0, y: 0, theta: 0 },
+    linearVelocity: 0,
+    angularVelocity: 0,
     battery: 100,
+    path: [],
+    pen: { isDown: true, color: '#b45309', width: 2 }, // Default orange pen
 };
 
 // Initial Virtual File System

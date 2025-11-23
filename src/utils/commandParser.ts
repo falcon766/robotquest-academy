@@ -141,20 +141,68 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
             };
         }
 
-        // ros2 topic list
+        // ros2 topic pub <topic_name> <msg_type> <args>
         if (subCommand === 'topic') {
             if (parts[2] === 'list') {
                 return {
-                    output: '/parameter_events\n/rosout',
+                    output: '/parameter_events\n/rosout\n/turtle1/cmd_vel\n/turtle1/pose\n/turtle1/color_sensor',
                     success: true,
                 };
             }
-            // ros2 topic pub <topic_name> <msg_type> <args>
+
             if (parts[2] === 'pub') {
                 const topic = parts[3];
-                if (!topic) {
+                const msgType = parts[4];
+                const args = parts.slice(5).join(' '); // Simple arg parsing
+
+                if (!topic || !msgType) {
                     return { output: 'usage: ros2 topic pub <topic_name> <msg_type> <args>', success: false };
                 }
+
+                // Handle cmd_vel (Movement)
+                if (topic === '/turtle1/cmd_vel' && msgType === 'geometry_msgs/msg/Twist') {
+                    // Parse args like "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"
+                    // For simplicity in this mock, we'll look for "linear: {x: VAL}" and "angular: {z: VAL}"
+
+                    let linearX = 0;
+                    let angularZ = 0;
+
+                    const linearMatch = args.match(/linear:\s*{\s*x:\s*([\d.-]+)/);
+                    const angularMatch = args.match(/angular:\s*{\s*z:\s*([\d.-]+)/);
+
+                    if (linearMatch) linearX = parseFloat(linearMatch[1]);
+                    if (angularMatch) angularZ = parseFloat(angularMatch[1]);
+
+                    // Update Robot State directly (Simulation Step)
+                    const currentState = store.robotState;
+                    const dt = 1.0; // Simulate 1 second of movement for this command
+
+                    const newTheta = currentState.position.theta + angularZ * dt;
+                    const newX = currentState.position.x + Math.cos(newTheta) * linearX * dt;
+                    const newY = currentState.position.y + Math.sin(newTheta) * linearX * dt;
+
+                    // Update Path
+                    const newPath = [...currentState.path, {
+                        x: newX,
+                        y: newY,
+                        penDown: currentState.pen.isDown,
+                        color: currentState.pen.color,
+                        width: currentState.pen.width
+                    }];
+
+                    store.updateRobotState({
+                        position: { x: newX, y: newY, theta: newTheta },
+                        path: newPath
+                    });
+
+                    return {
+                        output: `publisher: beginning loop\npublishing to: ${topic}`,
+                        success: true,
+                        action: 'publish_topic',
+                        payload: { topic },
+                    };
+                }
+
                 return {
                     output: `publisher: beginning loop\npublishing to: ${topic}`,
                     success: true,
@@ -164,11 +212,65 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
             }
         }
 
+        // ros2 service call <service_name> <service_type> <args>
+        if (subCommand === 'service') {
+            if (parts[2] === 'call') {
+                const service = parts[3];
+                const args = parts.slice(5).join(' ');
+
+                if (service === '/reset') {
+                    store.updateRobotState({
+                        position: { x: 0, y: 0, theta: 0 },
+                        path: [],
+                        pen: { isDown: true, color: '#b45309', width: 2 }
+                    });
+                    return { output: '', success: true };
+                }
+
+                if (service === '/turtle1/teleport_absolute') {
+                    // args: "{x: 5.5, y: 5.5, theta: 0.0}"
+                    const xMatch = args.match(/x:\s*([\d.-]+)/);
+                    const yMatch = args.match(/y:\s*([\d.-]+)/);
+
+                    if (xMatch && yMatch) {
+                        const x = parseFloat(xMatch[1]);
+                        const y = parseFloat(yMatch[1]);
+
+                        // Teleport breaks the path (pen up effectively)
+                        store.updateRobotState({
+                            position: { ...store.robotState.position, x, y }
+                        });
+                        return { output: '', success: true };
+                    }
+                }
+
+                if (service === '/turtle1/set_pen') {
+                    // args: "{r: 255, g: 0, b: 0, width: 3, off: 0}"
+                    const rMatch = args.match(/r:\s*(\d+)/);
+                    const gMatch = args.match(/g:\s*(\d+)/);
+                    const bMatch = args.match(/b:\s*(\d+)/);
+                    const wMatch = args.match(/width:\s*(\d+)/);
+
+                    if (rMatch && gMatch && bMatch) {
+                        const color = `rgb(${rMatch[1]}, ${gMatch[1]}, ${bMatch[1]})`;
+                        const width = wMatch ? parseInt(wMatch[1]) : 2;
+
+                        store.updateRobotState({
+                            pen: { ...store.robotState.pen, color, width }
+                        });
+                        return { output: '', success: true };
+                    }
+                }
+
+                return { output: 'service call success', success: true };
+            }
+        }
+
         // ros2 node list
         if (subCommand === 'node') {
             if (parts[2] === 'list') {
                 return {
-                    output: '/talker\n/listener', // Mocked for now
+                    output: '/turtlesim\n/teleop_turtle',
                     success: true,
                 };
             }

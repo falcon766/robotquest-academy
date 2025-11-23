@@ -27,8 +27,12 @@ export interface RobotState {
     isNodeRunning: boolean;
     activeNodes: string[];
     activeTopics: string[];
-    position: { x: number; y: number };
+    position: { x: number; y: number; theta: number };
+    linearVelocity: number;
+    angularVelocity: number;
     battery: number;
+    path: { x: number; y: number; penDown: boolean; color: string; width: number }[];
+    pen: { isDown: boolean; color: string; width: number };
 }
 
 export interface UserProfile {
