@@ -337,9 +337,9 @@ Type:
                         id: 'lesson_3_1',
                         title: '1. Hello World of Robotics',
                         contentMarkdown: `
-## What is that Chart on the Left?
+## What is that Window on the Right?
 
-That "chart" is actually a 2D simulation window! In ROS, visualization is critical because you can't always see what the robot is thinking just by looking at the hardware.
+That window is your **Visualizer**. In ROS 2, seeing is believing. You can't always tell what a robot is doing just by looking at text logs.
 
 ## Meet Turtlesim
 
@@ -353,7 +353,7 @@ Type:
 
 \`ros2 run turtlesim turtlesim_node\`
 
-**Watch the panel on the left!** You should see a blue turtle appear in the center.
+**Watch the Visualizer on the right!** You should see a blue turtle appear in the center.
                         `,
                         initialCode: '',
                         expectedCommand: 'ros2 run turtlesim turtlesim_node',
