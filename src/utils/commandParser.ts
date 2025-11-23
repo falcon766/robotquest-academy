@@ -125,6 +125,13 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
 
             // Special handling for turtlesim
             if (pkg === 'turtlesim' && exec === 'turtlesim_node') {
+                // Reset robot state for new simulation
+                store.updateRobotState({
+                    position: { x: 0, y: 0, theta: 0 },
+                    path: [],
+                    pen: { isDown: true, color: '#b45309', width: 2 }
+                });
+
                 return {
                     output: `[INFO] [turtlesim]: Starting turtlesim node\n[INFO] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]`,
                     success: true,
@@ -167,8 +174,8 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
                     let linearX = 0;
                     let angularZ = 0;
 
-                    const linearMatch = args.match(/linear:\s*{\s*x:\s*([\d.-]+)/);
-                    const angularMatch = args.match(/angular:\s*{\s*z:\s*([\d.-]+)/);
+                    const linearMatch = args.match(/linear:\s*\{[^}]*x:\s*([\d.-]+)/);
+                    const angularMatch = args.match(/angular:\s*\{[^}]*z:\s*([\d.-]+)/);
 
                     if (linearMatch) linearX = parseFloat(linearMatch[1]);
                     if (angularMatch) angularZ = parseFloat(angularMatch[1]);
