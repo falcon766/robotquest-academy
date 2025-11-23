@@ -40,7 +40,7 @@ export const Terminal = () => {
                 e.preventDefault();
 
                 const linearSpeed = 2.0;
-                const angularSpeed = 1.8;
+                const angularSpeed = 0.2; // Reduced for finer control (~5-6 degrees per press)
                 const dt = 0.5; // Discrete step size
 
                 let linear = 0;
