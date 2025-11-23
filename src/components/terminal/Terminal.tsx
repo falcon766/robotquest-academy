@@ -177,11 +177,38 @@ export const Terminal = () => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     className="flex-1 bg-transparent border-none outline-none text-slate-200 placeholder-slate-600"
-                    placeholder="Type a command..."
+                    placeholder={robotState.activeNodes.includes('turtle_teleop_key') ? "Use arrow keys to drive..." : "Type a command..."}
                     autoComplete="off"
                     autoFocus
                 />
             </div>
+
+            {/* Teleop Overlay */}
+            {robotState.activeNodes.includes('turtle_teleop_key') && (
+                <div className="absolute top-4 right-4 bg-slate-800/90 border border-slate-600 rounded-lg p-3 shadow-xl backdrop-blur-sm z-20 flex flex-col gap-2 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-center gap-2 text-orange-400 font-bold text-xs uppercase tracking-wider">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                        </span>
+                        Teleop Active
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                        Use <span className="text-slate-200 font-mono bg-slate-700 px-1 rounded">Arrow Keys</span> to move
+                    </div>
+                    <button
+                        onClick={() => {
+                            const newActiveNodes = robotState.activeNodes.filter(n => n !== 'turtle_teleop_key');
+                            updateRobotState({ activeNodes: newActiveNodes });
+                            addLog('output', '^C\n[INFO] [teleop_turtle]: Stopping teleop node');
+                            inputRef.current?.focus();
+                        }}
+                        className="mt-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs py-1 px-2 rounded border border-red-500/30 transition-colors flex items-center justify-center gap-1"
+                    >
+                        <span>Stop Node (Ctrl+C)</span>
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

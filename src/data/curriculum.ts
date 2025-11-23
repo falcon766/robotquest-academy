@@ -385,11 +385,18 @@ This node listens for keyboard presses and converts them into velocity commands 
 ## Try It Yourself
 
 Run the teleop node:
+Now that you have a turtle, let's move it!
+                
+In ROS 2, we can use a **teleoperation node** to control the robot using our keyboard.
+
+Run the following command to start the teleop node:
 
 \`ros2 run turtlesim turtle_teleop_key\`
 
-**Note:** In this web simulator, we've simplified it. Just running the command will simulate the node starting. In a real terminal, you would need to keep the terminal window focused to drive.
-                        `,
+**Instructions:**
+1. Once the node starts, use your **Arrow Keys** to drive the turtle.
+2. You will see the velocity commands and position updates in the terminal.
+3. **IMPORTANT**: When you are done driving, press **Ctrl+C** (or click the Stop button) to exit the teleop mode and return to the terminal.`,
                         initialCode: '',
                         expectedCommand: 'ros2 run turtlesim turtle_teleop_key',
                         successMessage: 'Teleop started! In a real ROS system, you would now use your arrow keys to drive the turtle around.',
