@@ -69,7 +69,7 @@ export const Dashboard = () => {
                     </div>
                     <p className="text-slate-400 text-sm mb-6 leading-relaxed">Master the Linux command line and configure your ROS 2 environment.</p>
                     <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                        <div className="bg-orange-500 h-full" style={{ width: '20%' }}></div>
+                        <div className="bg-orange-500 h-full" style={{ width: `${profile.completedLessons.includes('lesson_1') ? 100 : 0}%` }}></div>
                     </div>
                 </div>
 

@@ -3,6 +3,7 @@ import { Sidebar } from './Sidebar';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Terminal } from '../terminal/Terminal';
 import { CanvasBoard } from '../visualizer/CanvasBoard';
+import { LessonContent } from '../lesson/LessonContent';
 
 export const MainLayout = () => {
     const location = useLocation();
@@ -20,9 +21,9 @@ export const MainLayout = () => {
                         </div>
                     ) : (
                         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-                            {/* Left Panel: Lesson Content (Placeholder for now, rendered via Outlet if we had lesson routes) */}
+                            {/* Left Panel: Lesson Content */}
                             <div className="flex-1 p-6 overflow-auto border-r border-slate-800">
-                                <Outlet />
+                                <LessonContent />
                             </div>
 
                             {/* Right Panel: Interactive Terminal & Visualizer */}
