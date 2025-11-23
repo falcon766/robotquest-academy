@@ -32,6 +32,8 @@ interface LessonStore {
     listFiles: () => string;
     createDirectory: (name: string) => string | null;
     createFile: (name: string, content?: string) => string | null;
+    readFile: (name: string) => string;
+    removeNode: (name: string) => string | null;
 }
 
 const initialRobotState: RobotState = {
@@ -246,6 +248,40 @@ export const useLessonStore = create<LessonStore>((set, get) => ({
 
         if (!node.children) node.children = [];
         node.children.push({ name, type: 'file', content });
+
+        set({ fileSystem: newFS });
+        return null;
+    },
+
+    readFile: (name: string) => {
+        const { fileSystem, currentPath } = get();
+        let node = fileSystem;
+        for (const p of currentPath) {
+            const found = node.children?.find(c => c.name === p);
+            if (found) node = found;
+        }
+
+        const file = node.children?.find(c => c.name === name);
+        if (!file) return `cat: ${name}: No such file or directory`;
+        if (file.type === 'directory') return `cat: ${name}: Is a directory`;
+
+        return file.content || '';
+    },
+
+    removeNode: (name: string) => {
+        const { fileSystem, currentPath } = get();
+        const newFS = JSON.parse(JSON.stringify(fileSystem));
+
+        let node = newFS;
+        for (const p of currentPath) {
+            const found = node.children?.find((c: any) => c.name === p);
+            if (found) node = found;
+        }
+
+        const index = node.children?.findIndex((c: any) => c.name === name);
+        if (index === -1 || index === undefined) return `rm: cannot remove '${name}': No such file or directory`;
+
+        node.children.splice(index, 1);
 
         set({ fileSystem: newFS });
         return null;

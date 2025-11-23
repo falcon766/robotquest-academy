@@ -38,6 +38,8 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
   pwd       Print working directory
   mkdir     Create directory
   touch     Create file
+  rm        Remove file or directory
+  cat       Read file content
   source    Source the ROS 2 setup file
   ros2      Run ROS 2 commands (run, topic, node)`,
             success: true,
@@ -86,6 +88,21 @@ export const parseCommand = (input: string, currentLesson: Lesson | null): Comma
         const name = parts[1];
         if (!name) return { output: 'touch: missing operand', success: false };
         const error = store.createFile(name);
+        if (error) return { output: error, success: false };
+        return { output: '', success: true };
+    }
+
+    if (command === 'cat') {
+        const name = parts[1];
+        if (!name) return { output: 'cat: missing operand', success: false };
+        const output = store.readFile(name);
+        return { output, success: true };
+    }
+
+    if (command === 'rm') {
+        const name = parts[1];
+        if (!name) return { output: 'rm: missing operand', success: false };
+        const error = store.removeNode(name);
         if (error) return { output: error, success: false };
         return { output: '', success: true };
     }
