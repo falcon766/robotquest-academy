@@ -359,6 +359,218 @@ Type:
                         expectedCommand: 'ros2 run turtlesim turtlesim_node',
                         successMessage: 'The turtle is alive! You just started a graphical node. This is your first step into robot simulation.',
                         xpReward: 30,
+                    },
+                    {
+                        id: 'lesson_3_2',
+                        title: '2. Driving the Turtle (Teleop)',
+                        contentMarkdown: `
+## Taking Control
+
+Running a simulation is fun, but controlling it is better. We can use a **Teleoperation Node** to drive the turtle with our keyboard.
+
+## The teleop_key Node
+
+This node listens for keyboard presses and converts them into velocity commands for the turtle.
+
+## Try It Yourself
+
+Run the teleop node:
+
+\`ros2 run turtlesim turtle_teleop_key\`
+
+**Note:** In this web simulator, we've simplified it. Just running the command will simulate the node starting. In a real terminal, you would need to keep the terminal window focused to drive.
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 run turtlesim turtle_teleop_key',
+                        successMessage: 'Teleop started! In a real ROS system, you would now use your arrow keys to drive the turtle around.',
+                        xpReward: 30,
+                    },
+                    {
+                        id: 'lesson_3_3',
+                        title: '3. The Magic of Topics',
+                        contentMarkdown: `
+## How did that work?
+
+When you pressed keys (hypothetically), the teleop node sent messages to the turtlesim node. They communicated over a **Topic**.
+
+## The /turtle1/cmd_vel Topic
+
+The turtle listens to a topic called \`/turtle1/cmd_vel\` (Command Velocity). It expects messages of type \`geometry_msgs/msg/Twist\`, which contain linear (forward) and angular (turning) speeds.
+
+## Try It Yourself
+
+Let's see this topic in the list.
+
+Type:
+
+\`ros2 topic list\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 topic list',
+                        successMessage: 'There it is! /turtle1/cmd_vel is the communication channel for movement.',
+                        xpReward: 30,
+                    },
+                    {
+                        id: 'lesson_3_4',
+                        title: '4. Moving via Command Line',
+                        contentMarkdown: `
+## Hacking the Matrix
+
+You don't need a joystick or keyboard to move the robot. You can publish messages directly to the topic from the terminal!
+
+## The ros2 topic pub Command
+
+**Syntax:**
+\`ros2 topic pub <topic> <type> <data>\`
+
+## Try It Yourself
+
+Let's tell the turtle to move forward.
+
+Type:
+
+\`ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"',
+                        successMessage: 'It moved! You just manually injected a message into the robot\'s brain.',
+                        xpReward: 40,
+                    },
+                    {
+                        id: 'lesson_3_5',
+                        title: '5. Drawing a Circle',
+                        contentMarkdown: `
+## Combining Speeds
+
+If we move forward (linear x) and turn (angular z) at the same time, the turtle will drive in a circle.
+
+## Try It Yourself
+
+Let's make it spin!
+
+Type:
+
+\`ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"',
+                        successMessage: 'Look at it go! By combining linear and angular velocity, you can create complex paths.',
+                        xpReward: 40,
+                    },
+                    {
+                        id: 'lesson_3_6',
+                        title: '6. Teleporting (Services)',
+                        contentMarkdown: `
+## Topics vs. Services
+
+Topics are for continuous data (like "move now!"). **Services** are for one-time actions (like "teleport to X").
+
+## The /turtle1/teleport_absolute Service
+
+Let's instantly move the turtle to a new position.
+
+## Try It Yourself
+
+Type:
+
+\`ros2 service call /turtle1/teleport_absolute turtlesim/srv/TeleportAbsolute "{x: 1.0, y: 1.0, theta: 0.0}"\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 service call /turtle1/teleport_absolute turtlesim/srv/TeleportAbsolute "{x: 1.0, y: 1.0, theta: 0.0}"',
+                        successMessage: 'Zap! The turtle teleported. Services are great for requesting specific behaviors.',
+                        xpReward: 40,
+                    },
+                    {
+                        id: 'lesson_3_7',
+                        title: '7. Changing the Pen',
+                        contentMarkdown: `
+## Customizing the Visuals
+
+Turtlesim allows you to change the pen color and width using a service.
+
+## The /turtle1/set_pen Service
+
+Let's change the pen to **Red** and make it **Thick**.
+
+## Try It Yourself
+
+Type:
+
+\`ros2 service call /turtle1/set_pen turtlesim/srv/SetPen "{r: 255, g: 0, b: 0, width: 5, off: 0}"\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 service call /turtle1/set_pen turtlesim/srv/SetPen "{r: 255, g: 0, b: 0, width: 5, off: 0}"',
+                        successMessage: 'Pen changed! Any future movement will now draw a thick red line.',
+                        xpReward: 40,
+                    },
+                    {
+                        id: 'lesson_3_8',
+                        title: '8. Resetting the World',
+                        contentMarkdown: `
+## Cleaning Up
+
+Made a mess? You can reset the simulation to its initial state using the global reset service.
+
+## The /reset Service
+
+## Try It Yourself
+
+Type:
+
+\`ros2 service call /reset std_srvs/srv/Empty\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 service call /reset std_srvs/srv/Empty',
+                        successMessage: 'Fresh start! The turtle is back in the center and the screen is clear.',
+                        xpReward: 20,
+                    },
+                    {
+                        id: 'lesson_3_9',
+                        title: '9. Spawning a Friend',
+                        contentMarkdown: `
+## Multi-Robot Systems
+
+ROS 2 is designed for fleets of robots. You can spawn multiple turtles in the same world.
+
+## The /spawn Service
+
+## Try It Yourself
+
+Let's create "turtle2" at position (2, 2).
+
+Type:
+
+\`ros2 service call /spawn turtlesim/srv/Spawn "{x: 2.0, y: 2.0, theta: 0.0, name: 'turtle2'}"\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 service call /spawn turtlesim/srv/Spawn "{x: 2.0, y: 2.0, theta: 0.0, name: \'turtle2\'}"',
+                        successMessage: 'A new challenger approaches! (Note: In this basic sim, we only visualize one turtle, but the command worked!)',
+                        xpReward: 50,
+                    },
+                    {
+                        id: 'lesson_3_10',
+                        title: '10. Rviz: Seeing the Invisible',
+                        contentMarkdown: `
+## Beyond 2D
+
+Turtlesim is great for learning, but real robots live in 3D. **Rviz** (ROS Visualization) is the tool used to visualize 3D sensor data like LIDAR, cameras, and robot models.
+
+## The Concept
+
+In Rviz, you don't "control" the robot directly. You **subscribe** to topics to see what the robot sees.
+
+## Try It Yourself
+
+Let's pretend to launch Rviz.
+
+Type:
+
+\`ros2 run rviz2 rviz2\`
+                        `,
+                        initialCode: '',
+                        expectedCommand: 'ros2 run rviz2 rviz2',
+                        successMessage: 'Rviz launched! (In a full system, a 3D environment would appear). You have now mastered the basics of ROS 2 Visualization!',
+                        xpReward: 50,
                     }
                 ]
             }
