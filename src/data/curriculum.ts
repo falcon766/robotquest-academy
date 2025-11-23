@@ -67,6 +67,7 @@ In ROS, you'll use similar commands to send messages between robot components!
                         expectedCommand: 'echo "Hello ROS"',
                         successMessage: 'Excellent! You just executed your first command. The terminal echoed your message back. In ROS, nodes communicate by echoing messages like this!',
                         xpReward: 10,
+                        visualizationType: 'terminal_echo'
                     },
                     {
                         id: 'lesson_2',
@@ -108,6 +109,7 @@ Understanding where you are in the file system is the foundation for everything 
                         expectedCommand: 'pwd',
                         successMessage: 'Great! You can now see your current location. This is crucial when working with ROS workspaces and packages.',
                         xpReward: 15,
+                        visualizationType: 'fs_pwd'
                     },
                     {
                         id: 'lesson_3',
@@ -138,6 +140,7 @@ You should see a list of files. In our simulation, you might see folders like \`
                         expectedCommand: 'ls',
                         successMessage: 'Nice! You can now inspect directories. In ROS, you will use this constantly to check if packages are built or if bag files are saved.',
                         xpReward: 15,
+                        visualizationType: 'fs_ls'
                     },
                     {
                         id: 'lesson_4',
@@ -170,6 +173,7 @@ Type:
                         expectedCommand: 'cd workspace',
                         successMessage: 'You moved! Navigation is key. In ROS, you will jump between your workspace source, build folders, and system install paths frequently.',
                         xpReward: 20,
+                        visualizationType: 'fs_cd'
                     },
                     {
                         id: 'lesson_5',
@@ -198,6 +202,7 @@ Type:
                         expectedCommand: 'mkdir my_package',
                         successMessage: 'Directory created! You will use this to create new ROS packages and organize your launch files.',
                         xpReward: 20,
+                        visualizationType: 'fs_mkdir'
                     },
                     {
                         id: 'lesson_6',
@@ -226,6 +231,7 @@ Type:
                         expectedCommand: 'touch node.py',
                         successMessage: 'File created! In the real world, you would now open this file in a code editor to write your ROS node.',
                         xpReward: 20,
+                        visualizationType: 'fs_touch'
                     }
                 ]
             },

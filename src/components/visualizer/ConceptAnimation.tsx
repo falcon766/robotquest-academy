@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-export type AnimationType = 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set';
+export type AnimationType = 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set' | 'terminal_echo' | 'fs_pwd' | 'fs_ls' | 'fs_cd' | 'fs_mkdir' | 'fs_touch';
 
 interface ConceptAnimationProps {
     type: AnimationType;
@@ -14,7 +14,156 @@ export const ConceptAnimation = ({ type }: ConceptAnimationProps) => {
     if (type === 'node_inspection') return <NodeInspectionAnimation />;
     if (type === 'node_remap') return <NodeRemapAnimation />;
     if (type === 'parameter_set') return <ParameterSetAnimation />;
+    if (type === 'terminal_echo') return <TerminalEchoAnimation />;
+    if (type === 'fs_pwd') return <FsPwdAnimation />;
+    if (type === 'fs_ls') return <FsLsAnimation />;
+    if (type === 'fs_cd') return <FsCdAnimation />;
+    if (type === 'fs_mkdir') return <FsMkdirAnimation />;
+    if (type === 'fs_touch') return <FsTouchAnimation />;
     return null;
+};
+
+const TerminalEchoAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="w-64 h-32 bg-slate-950 rounded border border-slate-700 p-4 font-mono text-xs relative">
+                <div className="flex gap-1.5 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                    <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                </div>
+                <div className="text-slate-400">$ echo "Hello ROS"</div>
+                <motion.div
+                    className="text-green-400 mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 1, 1, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, times: [0.2, 0.3, 0.8, 0.9] }}
+                >
+                    Hello ROS
+                </motion.div>
+                <motion.div
+                    className="w-2 h-4 bg-slate-500 mt-1"
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.8, repeat: Infinity }}
+                />
+            </div>
+        </div>
+    );
+};
+
+const FsPwdAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="flex items-center gap-2 text-sm font-mono">
+                <div className="flex flex-col items-center">
+                    <div className="w-12 h-10 bg-slate-700 rounded mb-1 flex items-center justify-center">/</div>
+                    <span className="text-slate-500 text-[10px]">root</span>
+                </div>
+                <div className="h-0.5 w-8 bg-slate-600"></div>
+                <div className="flex flex-col items-center">
+                    <div className="w-12 h-10 bg-slate-700 rounded mb-1 flex items-center justify-center">home</div>
+                    <span className="text-slate-500 text-[10px]">home</span>
+                </div>
+                <div className="h-0.5 w-8 bg-slate-600"></div>
+                <motion.div
+                    className="flex flex-col items-center"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                >
+                    <div className="w-12 h-10 bg-orange-600 rounded mb-1 flex items-center justify-center text-white">user</div>
+                    <span className="text-orange-400 text-[10px] font-bold">YOU ARE HERE</span>
+                </motion.div>
+            </div>
+        </div>
+    );
+};
+
+const FsLsAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="w-64 p-4">
+                <div className="text-slate-400 text-xs mb-4 text-center">$ ls</div>
+                <div className="grid grid-cols-4 gap-4">
+                    {[0, 1, 2, 3].map(i => (
+                        <motion.div
+                            key={i}
+                            className="flex flex-col items-center"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.2, duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                        >
+                            <div className={`w-8 h-10 ${i % 2 === 0 ? 'bg-blue-500/20 border-blue-500' : 'bg-slate-700 border-slate-600'} border rounded mb-1`}></div>
+                            <div className="w-8 h-1 bg-slate-600 rounded-full"></div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const FsCdAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="relative w-64 h-32 flex items-center justify-between px-8">
+                <div className="flex flex-col items-center z-10">
+                    <div className="w-12 h-10 bg-slate-700 border border-slate-500 rounded mb-1"></div>
+                    <span className="text-[10px] text-slate-400">current</span>
+                </div>
+
+                <div className="flex flex-col items-center z-10">
+                    <div className="w-12 h-10 bg-blue-900/50 border border-blue-500 rounded mb-1"></div>
+                    <span className="text-[10px] text-blue-400">target</span>
+                </div>
+
+                <motion.div
+                    className="absolute top-1/2 left-12 w-4 h-4 bg-orange-500 rounded-full z-20"
+                    animate={{ x: [0, 120], y: [0, -20, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+            </div>
+            <div className="absolute bottom-4 text-xs text-slate-500 font-mono">cd target</div>
+        </div>
+    );
+};
+
+const FsMkdirAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="flex items-center gap-4">
+                <div className="w-12 h-10 bg-slate-800 border border-slate-700 rounded opacity-50"></div>
+                <div className="w-12 h-10 bg-slate-800 border border-slate-700 rounded opacity-50"></div>
+                <motion.div
+                    className="w-12 h-10 bg-blue-600 border border-blue-400 rounded flex items-center justify-center"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: [0, 1.2, 1], opacity: 1 }}
+                    transition={{ duration: 1, repeat: Infinity, repeatDelay: 1 }}
+                >
+                    <span className="text-lg font-bold text-white">+</span>
+                </motion.div>
+            </div>
+            <div className="absolute bottom-4 text-xs text-slate-500 font-mono">mkdir new_folder</div>
+        </div>
+    );
+};
+
+const FsTouchAnimation = () => {
+    return (
+        <div className="h-48 flex items-center justify-center bg-slate-900/50 rounded-lg border border-slate-800 relative overflow-hidden">
+            <div className="flex items-center gap-4">
+                <div className="w-10 h-12 bg-slate-800 border border-slate-700 rounded opacity-50"></div>
+                <motion.div
+                    className="w-10 h-12 bg-slate-200 border border-white rounded flex items-center justify-center relative"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: [0, 1.2, 1], opacity: 1 }}
+                    transition={{ duration: 1, repeat: Infinity, repeatDelay: 1 }}
+                >
+                    <div className="absolute top-0 right-0 w-3 h-3 bg-slate-300"></div>
+                </motion.div>
+            </div>
+            <div className="absolute bottom-4 text-xs text-slate-500 font-mono">touch file.py</div>
+        </div>
+    );
 };
 
 const SetupEnvAnimation = () => {

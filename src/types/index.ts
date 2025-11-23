@@ -6,7 +6,7 @@ export interface Lesson {
     expectedCommand: string | RegExp;
     successMessage: string;
     xpReward: number;
-    visualizationType?: 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set';
+    visualizationType?: 'topic' | 'service' | 'node' | 'action' | 'setup_env' | 'node_inspection' | 'node_remap' | 'parameter_set' | 'terminal_echo' | 'fs_pwd' | 'fs_ls' | 'fs_cd' | 'fs_mkdir' | 'fs_touch';
 }
 
 export interface Module {
