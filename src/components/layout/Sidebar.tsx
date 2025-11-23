@@ -18,7 +18,7 @@ export const Sidebar = () => {
     };
 
     return (
-        <aside className="w-64 bg-slate-950 border-r border-slate-800 h-screen p-4 hidden md:flex flex-col">
+        <aside className="w-64 bg-black border-r border-slate-800 h-screen p-4 hidden md:flex flex-col">
             <div className="space-y-6">
                 <div className="text-slate-500 text-xs font-bold uppercase tracking-widest px-2">Curriculum</div>
                 <div className="space-y-1">
