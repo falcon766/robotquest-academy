@@ -259,6 +259,7 @@ Type:
                         expectedCommand: 'source /opt/ros/humble/setup.bash',
                         successMessage: 'Environment sourced! If you ever see "command not found: ros2", you probably forgot this step.',
                         xpReward: 25,
+                        visualizationType: 'node'
                     },
                     {
                         id: 'lesson_2_2',
@@ -293,6 +294,7 @@ Type:
                         expectedCommand: 'ros2 run demo_nodes_cpp talker',
                         successMessage: 'You started a node! This node publishes "Hello World" messages. You are now running actual ROS 2 code!',
                         xpReward: 25,
+                        visualizationType: 'node'
                     },
                     {
                         id: 'lesson_2_3',
@@ -319,6 +321,7 @@ Type:
                         expectedCommand: 'ros2 node list',
                         successMessage: 'Correct! You should see /talker in the list. This confirms your node is alive and registered with the ROS graph.',
                         xpReward: 25,
+                        visualizationType: 'node'
                     }
                 ]
             }
