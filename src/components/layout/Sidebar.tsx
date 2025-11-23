@@ -1,127 +1,91 @@
-
 import { useLessonStore } from '../../store/useLessonStore';
-import { Terminal, Share2, MessageSquare } from 'lucide-react';
+import { Terminal, ChevronRight, CheckCircle } from 'lucide-react';
+import { curriculum } from '../../data/curriculum';
+import { useAuth } from '../../contexts/AuthContext';
+import { useEffect, useState } from 'react';
+import { userService } from '../../services/userService';
 
 export const Sidebar = () => {
-    const { setCurrentLesson } = useLessonStore();
+    const { setCurrentLesson, currentLesson } = useLessonStore();
+    const { currentUser } = useAuth();
+    const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+    const [openModules, setOpenModules] = useState<string[]>(['module_1']);
 
-    const startLesson1 = () => {
-        setCurrentLesson({
-            id: 'lesson_1',
-            title: 'Introduction to the Terminal',
-            contentMarkdown: `
-## What is the Terminal?
+    useEffect(() => {
+        if (currentUser) {
+            userService.getUserProfile(currentUser.uid).then(profile => {
+                if (profile) setCompletedLessons(profile.completedLessons);
+            });
+        }
 
-The terminal (also called command line or shell) is a text-based interface for interacting with your computer. Unlike clicking buttons in a graphical interface, you type commands to tell the computer what to do.
+        const handleCompletion = () => {
+            if (currentUser) {
+                userService.getUserProfile(currentUser.uid).then(profile => {
+                    if (profile) setCompletedLessons(profile.completedLessons);
+                });
+            }
+        };
+        window.addEventListener('lessonCompleted', handleCompletion);
+        return () => window.removeEventListener('lessonCompleted', handleCompletion);
+    }, [currentUser]);
 
-In robotics, the terminal is essential because:
-- **Efficiency**: Execute complex operations with a single command
-- **Automation**: Create scripts to run repetitive tasks
-- **Remote Access**: Control robots from anywhere without a screen
-- **Debugging**: See detailed system logs and error messages
-
-## Your First Command: echo
-
-The \`echo\` command is one of the simplest commands in Linux. It prints text to the terminal.
-
-**Syntax:**
-\`echo "Your text here"\`
-
-**Why start with echo?**
-- It's safe (won't change any files or settings)
-- You get instant visual feedback
-- It teaches command syntax (command + arguments)
-
-## Try It Yourself
-
-Type the following command in the terminal on the right:
-
-\`echo "Hello ROS"\`
-
-**What happens?**
-The terminal will display "Hello ROS" back to you. This confirms that:
-1. Your terminal is working
-2. You can execute commands
-3. You understand basic command syntax
-
-In ROS, you'll use similar commands to send messages between robot components!
-            `,
-            initialCode: '',
-            expectedCommand: 'echo "Hello ROS"',
-            successMessage: 'Excellent! You just executed your first command. The terminal echoed your message back. In ROS, nodes communicate by echoing messages like this!',
-            xpReward: 10,
-        });
-    };
-
-    const startLesson2 = () => {
-        setCurrentLesson({
-            id: 'lesson_2',
-            title: 'Understanding File Systems',
-            contentMarkdown: `
-## What is a File System?
-
-A file system is how your computer organizes and stores data. Think of it like a filing cabinet with folders and documents.
-
-In Linux (which ROS uses), everything is organized in a **tree structure** starting from the root directory \`/\`.
-
-## The pwd Command
-
-\`pwd\` stands for **"Print Working Directory"**. It shows you where you currently are in the file system.
-
-**Why is this important in robotics?**
-- ROS packages are stored in specific directories
-- Launch files need absolute paths to work
-- Logs and configuration files have standard locations
-- Knowing your location prevents path errors
-
-## Try It Yourself
-
-Type:
-
-\`pwd\`
-
-**What you'll see:**
-The terminal will print your current directory path (e.g., \`/home/user/workspace\`).
-
-**In ROS, you'll often need to:**
-- Navigate to package directories
-- Source workspace setup files from specific paths
-- Reference configuration files with absolute paths
-
-Understanding where you are in the file system is the foundation for everything else!
-            `,
-            initialCode: '',
-            expectedCommand: 'pwd',
-            successMessage: 'Great! You can now see your current location. This is crucial when working with ROS workspaces and packages.',
-            xpReward: 15,
-        });
+    const toggleModule = (moduleId: string) => {
+        setOpenModules(prev =>
+            prev.includes(moduleId) ? prev.filter(id => id !== moduleId) : [...prev, moduleId]
+        );
     };
 
     return (
-        <aside className="w-64 bg-black border-r border-slate-800 h-screen p-4 hidden md:flex flex-col">
-            <div className="space-y-6">
-                <div className="text-slate-500 text-xs font-bold uppercase tracking-widest px-2">Curriculum</div>
-                <div className="space-y-1">
-                    <button
-                        onClick={startLesson1}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900 text-slate-200 rounded-lg border border-slate-800 hover:border-orange-500/50 hover:bg-slate-800 transition-all group text-left"
-                    >
-                        <Terminal size={18} className="text-slate-500 group-hover:text-orange-400 transition-colors" />
-                        <span className="text-sm font-medium">Intro to Terminal</span>
-                    </button>
+        <aside className="w-72 bg-black border-r border-slate-800 h-full flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-slate-800">
+            <div className="p-4">
+                <div className="text-slate-500 text-xs font-bold uppercase tracking-widest px-2 mb-4">Curriculum</div>
 
-                    <button
-                        onClick={startLesson2}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900 text-slate-200 rounded-lg border border-slate-800 hover:border-orange-500/50 hover:bg-slate-800 transition-all group text-left"
-                    >
-                        <Share2 size={18} className="text-slate-500 group-hover:text-orange-400 transition-colors" />
-                        <span className="text-sm font-medium">File Systems</span>
-                    </button>
+                <div className="space-y-6">
+                    {curriculum.map(course => (
+                        <div key={course.id}>
+                            <h3 className="text-orange-500 font-bold text-sm px-2 mb-2 uppercase tracking-wider">{course.title}</h3>
+                            <div className="space-y-4">
+                                {course.modules.map(module => (
+                                    <div key={module.id} className="space-y-1">
+                                        <button
+                                            onClick={() => toggleModule(module.id)}
+                                            className="w-full flex items-center justify-between px-2 py-1.5 text-slate-300 hover:text-white transition-colors group"
+                                        >
+                                            <span className="font-medium text-sm">{module.title}</span>
+                                            <ChevronRight size={14} className={`transition-transform ${openModules.includes(module.id) ? 'rotate-90' : ''}`} />
+                                        </button>
 
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 text-slate-500 rounded-lg border border-transparent hover:bg-slate-900/50 transition-all text-left cursor-not-allowed opacity-60">
-                        <MessageSquare size={18} />
-                        <span className="text-sm font-medium">ROS Topics</span>
-                    </button>
+                                        {openModules.includes(module.id) && (
+                                            <div className="space-y-1 pl-2">
+                                                {module.lessons.map(lesson => {
+                                                    const isCompleted = completedLessons.includes(lesson.id);
+                                                    const isActive = currentLesson?.id === lesson.id;
+
+                                                    return (
+                                                        <button
+                                                            key={lesson.id}
+                                                            onClick={() => setCurrentLesson(lesson)}
+                                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all group text-left ${isActive
+                                                                ? 'bg-slate-900 border-orange-500/50 text-white'
+                                                                : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-900/50 hover:text-slate-200'
+                                                                }`}
+                                                        >
+                                                            {isCompleted ? (
+                                                                <CheckCircle size={16} className="text-green-500 shrink-0" />
+                                                            ) : (
+                                                                <Terminal size={16} className={`${isActive ? 'text-orange-500' : 'text-slate-600 group-hover:text-slate-400'} shrink-0`} />
+                                                            )}
+                                                            <span className="text-sm font-medium truncate">{lesson.title}</span>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </aside>

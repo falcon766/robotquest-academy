@@ -2,6 +2,7 @@ import { useLessonStore } from '../../store/useLessonStore';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { userService } from '../../services/userService';
+import { curriculum } from '../../data/curriculum';
 
 export const LessonContent = () => {
     const { currentLesson, setCurrentLesson } = useLessonStore();
@@ -24,16 +25,39 @@ export const LessonContent = () => {
     }, [currentUser, currentLesson]);
 
     const handleNextLesson = () => {
-        // For now, just clear the current lesson (in the future, load lesson_2, etc.)
-        setCurrentLesson({
-            id: 'coming_soon',
-            title: 'Coming Soon',
-            contentMarkdown: 'More lessons are on the way! Stay tuned.',
-            initialCode: '',
-            expectedCommand: '',
-            successMessage: '',
-            xpReward: 0,
-        });
+        // Find current lesson index
+        let nextLesson = null;
+        let foundCurrent = false;
+
+        for (const course of curriculum) {
+            for (const module of course.modules) {
+                for (const lesson of module.lessons) {
+                    if (foundCurrent) {
+                        nextLesson = lesson;
+                        break;
+                    }
+                    if (lesson.id === currentLesson?.id) {
+                        foundCurrent = true;
+                    }
+                }
+                if (nextLesson) break;
+            }
+            if (nextLesson) break;
+        }
+
+        if (nextLesson) {
+            setCurrentLesson(nextLesson);
+        } else {
+            setCurrentLesson({
+                id: 'coming_soon',
+                title: 'Coming Soon',
+                contentMarkdown: '## Congratulations!\n\nYou have completed all available lessons. Check back soon for more content!',
+                initialCode: '',
+                expectedCommand: '',
+                successMessage: '',
+                xpReward: 0,
+            });
+        }
     };
 
     if (!currentLesson) {

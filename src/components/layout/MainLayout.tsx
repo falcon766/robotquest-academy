@@ -10,7 +10,7 @@ export const MainLayout = () => {
     const isDashboard = location.pathname === '/dashboard';
 
     return (
-        <div className="min-h-screen bg-black text-slate-200 flex flex-col">
+        <div className="h-screen bg-black text-slate-200 flex flex-col overflow-hidden">
             <Navbar />
             <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
