@@ -4,7 +4,7 @@ import { parseCommand } from '../../utils/commandParser';
 import { useAuth } from '../../contexts/AuthContext';
 
 export const Terminal = () => {
-    const { terminalHistory, addLog, currentLesson, updateRobotState, clearLogs, completeLesson } = useLessonStore();
+    const { terminalHistory, addLog, currentLesson, updateRobotState, clearLogs, completeLesson, robotState } = useLessonStore();
     const { currentUser } = useAuth();
     const [input, setInput] = useState('');
     const [historyIndex, setHistoryIndex] = useState(-1);
@@ -48,7 +48,18 @@ export const Terminal = () => {
                 }
 
                 if (result.action === 'start_node') {
-                    updateRobotState({ isNodeRunning: true, activeNodes: [result.payload.executable] });
+                    const currentNodes = robotState.activeNodes || [];
+                    const newNode = result.payload.executable;
+
+                    // Avoid duplicates
+                    const newActiveNodes = currentNodes.includes(newNode)
+                        ? currentNodes
+                        : [...currentNodes, newNode];
+
+                    updateRobotState({
+                        isNodeRunning: true,
+                        activeNodes: newActiveNodes
+                    });
                 }
                 if (result.action === 'publish_topic') {
                     updateRobotState({ activeTopics: [result.payload.topic] });
