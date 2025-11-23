@@ -22,6 +22,64 @@ export const Terminal = () => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
+        // Check if teleop is running
+        const isTeleopRunning = robotState.activeNodes.includes('turtle_teleop_key');
+
+        if (isTeleopRunning) {
+            // Handle Ctrl+C to stop
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                const newActiveNodes = robotState.activeNodes.filter(n => n !== 'turtle_teleop_key');
+                updateRobotState({ activeNodes: newActiveNodes });
+                addLog('output', '^C\n[INFO] [teleop_turtle]: Stopping teleop node');
+                return;
+            }
+
+            // Handle Arrow Keys for Movement
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+
+                const linearSpeed = 2.0;
+                const angularSpeed = 1.8;
+                const dt = 0.5; // Discrete step size
+
+                let linear = 0;
+                let angular = 0;
+
+                if (e.key === 'ArrowUp') linear = linearSpeed;
+                if (e.key === 'ArrowDown') linear = -linearSpeed;
+                if (e.key === 'ArrowLeft') angular = angularSpeed;
+                if (e.key === 'ArrowRight') angular = -angularSpeed;
+
+                const current = robotState.position;
+                const newTheta = current.theta + angular * dt;
+                const newX = current.x + Math.cos(newTheta) * linear * dt;
+                const newY = current.y + Math.sin(newTheta) * linear * dt;
+
+                // Update Path
+                const newPath = [...robotState.path, {
+                    x: newX,
+                    y: newY,
+                    penDown: robotState.pen.isDown,
+                    color: robotState.pen.color,
+                    width: robotState.pen.width
+                }];
+
+                updateRobotState({
+                    position: { x: newX, y: newY, theta: newTheta },
+                    path: newPath
+                });
+                return;
+            }
+
+            // If teleop is running, we might want to block other inputs or just let them type?
+            // Real ros2 run takes over stdin. Let's block typing for now to simulate that.
+            if (e.key.length === 1) {
+                e.preventDefault();
+                return;
+            }
+        }
+
         if (e.key === 'Enter') {
             e.preventDefault();
             if (!input.trim()) return;
