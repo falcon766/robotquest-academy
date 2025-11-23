@@ -1,7 +1,40 @@
 import { useLessonStore } from '../../store/useLessonStore';
+import { useAuth } from '../../contexts/AuthContext';
+import { useEffect, useState } from 'react';
+import { userService } from '../../services/userService';
 
 export const LessonContent = () => {
-    const { currentLesson } = useLessonStore();
+    const { currentLesson, setCurrentLesson } = useLessonStore();
+    const { currentUser } = useAuth();
+    const [isCompleted, setIsCompleted] = useState(false);
+
+    useEffect(() => {
+        const checkCompletion = async () => {
+            if (currentUser && currentLesson) {
+                const profile = await userService.getUserProfile(currentUser.uid);
+                setIsCompleted(profile?.completedLessons.includes(currentLesson.id) || false);
+            }
+        };
+        checkCompletion();
+
+        // Listen for lesson completion
+        const handleCompletion = () => checkCompletion();
+        window.addEventListener('lessonCompleted', handleCompletion);
+        return () => window.removeEventListener('lessonCompleted', handleCompletion);
+    }, [currentUser, currentLesson]);
+
+    const handleNextLesson = () => {
+        // For now, just clear the current lesson (in the future, load lesson_2, etc.)
+        setCurrentLesson({
+            id: 'coming_soon',
+            title: 'Coming Soon',
+            contentMarkdown: 'More lessons are on the way! Stay tuned.',
+            initialCode: '',
+            expectedCommand: '',
+            successMessage: '',
+            xpReward: 0,
+        });
+    };
 
     if (!currentLesson) {
         return (
@@ -19,6 +52,11 @@ export const LessonContent = () => {
             <div className="mb-6">
                 <h1 className="text-3xl font-bold text-white mb-2">{currentLesson.title}</h1>
                 <div className="flex items-center gap-3">
+                    {isCompleted && (
+                        <span className="px-3 py-1 bg-green-500/10 text-green-400 text-xs font-medium rounded border border-green-500/20">
+                            ✓ Completed
+                        </span>
+                    )}
                     <span className="px-3 py-1 bg-orange-500/10 text-orange-400 text-xs font-medium rounded border border-orange-500/20">
                         {currentLesson.xpReward} XP
                     </span>
@@ -54,11 +92,27 @@ export const LessonContent = () => {
                     </div>
                 </div>
 
-                <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-4">
-                    <p className="text-sm text-blue-400">
-                        💡 <strong>Tip:</strong> Use the terminal on the right to execute commands. Your progress is saved automatically!
-                    </p>
-                </div>
+                {isCompleted && currentLesson.id !== 'coming_soon' && (
+                    <div className="bg-green-500/5 border border-green-500/20 rounded-lg p-6 mb-6">
+                        <p className="text-green-400 mb-4">
+                            🎉 Great job! You've completed this lesson.
+                        </p>
+                        <button
+                            onClick={handleNextLesson}
+                            className="px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-500 transition-all"
+                        >
+                            Next Lesson →
+                        </button>
+                    </div>
+                )}
+
+                {!isCompleted && (
+                    <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-4">
+                        <p className="text-sm text-blue-400">
+                            💡 <strong>Tip:</strong> Use the terminal on the right to execute commands. Your progress is saved automatically!
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );

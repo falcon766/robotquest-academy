@@ -78,6 +78,9 @@ export const useLessonStore = create<LessonStore>((set, get) => ({
                     }
                 ]
             }));
+
+            // Dispatch custom event to notify other components (like Navbar) to refresh
+            window.dispatchEvent(new CustomEvent('lessonCompleted'));
         }
     }
 }));

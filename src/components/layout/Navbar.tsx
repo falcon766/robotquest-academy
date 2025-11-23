@@ -9,6 +9,7 @@ export const Navbar = () => {
     const { currentUser, logout } = useAuth();
     const navigate = useNavigate();
     const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     useEffect(() => {
         if (currentUser) {
@@ -16,7 +17,17 @@ export const Navbar = () => {
         } else {
             setProfile(null);
         }
-    }, [currentUser]);
+    }, [currentUser, refreshTrigger]);
+
+    // Listen for lesson completion events to refresh XP
+    useEffect(() => {
+        const handleLessonComplete = () => {
+            setRefreshTrigger(prev => prev + 1);
+        };
+
+        window.addEventListener('lessonCompleted', handleLessonComplete);
+        return () => window.removeEventListener('lessonCompleted', handleLessonComplete);
+    }, []);
 
     const handleLogout = async () => {
         await logout();
