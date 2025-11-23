@@ -69,6 +69,9 @@ export const Terminal = () => {
                     position: { x: newX, y: newY, theta: newTheta },
                     path: newPath
                 });
+
+                // Feedback for the user
+                addLog('output', `[INFO] [teleop]: vel(lin=${linear.toFixed(1)}, ang=${angular.toFixed(1)}) -> Pose(x=${newX.toFixed(2)}, y=${newY.toFixed(2)}, theta=${newTheta.toFixed(2)})`);
                 return;
             }
 
